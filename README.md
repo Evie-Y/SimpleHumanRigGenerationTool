@@ -38,19 +38,30 @@ controls to certain joints. This is to improve the usability of the tool outside
 - Buttons to create unique curves, not rigged.
 
 ## TODO:
+
 Make UI
   - Checkbox for fk, ik, or both with a switch.
   - Button for standard humanoid rig generation.
   - Buttons to create unique curves, not rigged.
+
 Make unique controls
   - wrist
   - fingers
   - hip
   - ankle
   - pole vector
+
 Make IK rig functional
+
 Make FK rig functional
+
 Make IK/FK switch functional
+
 Make a spline rig functional
+
 Make controls change color based on L/R naming
+
 Make controls change boldness based on the control's function
+
+
+
