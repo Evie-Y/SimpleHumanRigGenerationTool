@@ -24,6 +24,7 @@ class RigGenWin(QtWidgets.QDialog):
         self.rigGen = RigGen()
         self.setWindowTitle("Simple Humanoid Rig Generator")
         self.resize(250, 500)
+        self._mk_win_layout()
 
     def cancel(self):
         self.close()
@@ -35,15 +36,27 @@ class RigGenWin(QtWidgets.QDialog):
     def _mk_win_layout(self):
         self.main_layout = QtWidgets.QVBoxLayout()
         # Text layout
+        self._mk_basic_rig_text_labels()
         # Color layout
         # IK/FK layout
         # Unique Controls Layout
         self.setLayout(self.main_layout)
         pass
     
-    def _mk_basic_rig_layout(self):
+    def _mk_basic_rig_text_labels(self):
+        self.suff_lbl = QtWidgets.QLabel('Make sure joints '
+            'have the "_JNT" suffix')
+        self.suff_lbl.setAlignment(Qt.AlignCenter)
+        self.suff_lbl.setStyleSheet('font: bold')
         # Text: 'Make sure joints have the '_JNT' suffix'
+        self.sel_lbl = QtWidgets.QLabel('Select Joints to be Rigged:')
+        self.sel_lbl.setAlignment(Qt.AlignCenter)
+        self.sel_lbl.setStyleSheet('font: bold')
         # Text: 'Select Joints to be Rigged'
+        self.main_layout.addWidget(self.suff_lbl)
+        self.main_layout.addWidget(self.sel_lbl)
+
+    def _mk_generate_rig_button(self):
         # Button: 'Generate' (the standard settings 
         # and generates the whole human rig)
         pass
