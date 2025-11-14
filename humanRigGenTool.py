@@ -24,10 +24,25 @@ class RigGenWin(QtWidgets.QDialog):
         self.rigGen = RigGen()
         self.setWindowTitle("Simple Humanoid Rig Generator")
         self.resize(250, 500)
+    
+    # UI 
+    # Text: 'Make sure joints have the '_JNT' suffix'
+    # Text: 'Select Joints to be Rigged'
+    # Button: 'Generate' (the standard settings and generates the whole human rig)
 
-    #Checkbox for fk, ik, or both with a switch.
-    #Button for standard humanoid rig generation.
-    #Buttons to create unique curves, not rigged.
+    # QComboBox: 'Right FK/ Color: ' (LIST)
+    # Checkbox: 'Same color for IK: ' (if on, ik/fk same colors)
+    # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
+    # QComboBox: 'Center / Color: ' (LIST)
+    # QComboBox: 'Left FK/ Color: ' (LIST)
+    # QComboBox: 'Left IK / Color: ' (LIST) (disabled if cb on)
+
+    # Checkbox: 'Unique Shapes ON: ' (if off, controls are circle crv)
+    # SpinBox: 'Control Size: ' (Min=.1, Max=100)
+    # Buttons: 'FK', 'IK', 'IK/FK' (creates ik/fk)
+
+    # QComboBox: 'Unique Controls: ' (LIST)
+    # Button: 'Create' (To create unique curves, not rigged.)
     pass
 
 class RigGen():
