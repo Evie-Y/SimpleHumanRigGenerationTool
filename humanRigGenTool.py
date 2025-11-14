@@ -37,6 +37,7 @@ class RigGenWin(QtWidgets.QDialog):
         self.main_layout = QtWidgets.QVBoxLayout()
         # Text layout
         self._mk_basic_rig_text_labels()
+        self._mk_generate_rig_button()
         # Color layout
         # IK/FK layout
         # Unique Controls Layout
@@ -57,8 +58,9 @@ class RigGenWin(QtWidgets.QDialog):
         self.main_layout.addWidget(self.sel_lbl)
 
     def _mk_generate_rig_button(self):
-        # Button: 'Generate' (the standard settings 
-        # and generates the whole human rig)
+        # Button: 'Generate' (the standard settings)
+        self.rig_btn = QtWidgets.QPushButton('Generate')
+        self.main_layout.addWidget(self.rig_btn)
         pass
 
     def _mk_con_colors_layout(self):
