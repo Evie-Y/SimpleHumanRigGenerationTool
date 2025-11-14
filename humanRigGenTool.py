@@ -5,16 +5,25 @@ from shiboken2 import wrapInstance
 
 import maya.cmds as cmds
 
+# Boilerplate code, just copy and keep handy somewhere.
+# import riggen
+# importlib.reload(riggen)
+
+# win = riggen.RigGenWin()
+# win.show()
+
 def get_maya_main_win():
     main_win = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_win), QtWidgets.QWidget)
 
-class rigGenWin(QtWidgets.QDialog):
+class RigGenWin(QtWidgets.QDialog):
+    pass
     #Checkbox for fk, ik, or both with a switch.
     #Button for standard humanoid rig generation.
     #Buttons to create unique curves, not rigged.
 
-class humanoidRigGenTool():
+class RigGen():
+    pass
     # Make unique controls
     # Make IK rig functional
     # Make FK rig functional
