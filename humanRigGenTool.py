@@ -39,6 +39,7 @@ class RigGenWin(QtWidgets.QDialog):
         self._mk_basic_rig_text_labels()
         self._mk_generate_rig_button()
         # Color layout
+        self._add_color_layout()
         # IK/FK layout
         # Unique Controls Layout
         self.setLayout(self.main_layout)
@@ -61,7 +62,16 @@ class RigGenWin(QtWidgets.QDialog):
         # Button: 'Generate' (the standard settings)
         self.rig_btn = QtWidgets.QPushButton('Generate')
         self.main_layout.addWidget(self.rig_btn)
-        pass
+
+    def _add_color_layout(self):
+        self.color_layout = QtWidgets.QFormLayout()
+        self._mk_con_color_check_box()
+        self.main_layout.addLayout(self.color_layout)
+    
+    def _mk_con_color_check_box(self):
+        # Checkbox: 'Same color for IK: ' (if on, ik/fk same colors)
+        self.enable_ik_color_cb = QtWidgets.QCheckBox('Same Color for IK')
+        self.color_layout.addRow(self.enable_ik_color_cb)
 
     def _mk_con_colors_layout(self):
         # Checkbox: 'Same color for IK: ' (if on, ik/fk same colors)
