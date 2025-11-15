@@ -43,8 +43,8 @@ class RigGenWin(QtWidgets.QDialog):
         # IK/FK layout
         self._add_ik_fk_layout()
         # Unique Controls Layout
+        self._add_unique_controls_layout()
         self.setLayout(self.main_layout)
-        pass
     
     def _mk_basic_rig_text_labels(self):
         # Text: 'Make sure joints have the '_JNT' suffix'
@@ -62,6 +62,7 @@ class RigGenWin(QtWidgets.QDialog):
     def _mk_generate_rig_button(self):
         # Button: 'Generate' (the standard settings)
         self.rig_btn = QtWidgets.QPushButton('Generate')
+        self.main_layout.addWidget(self.top_sprt)
         self.main_layout.addWidget(self.rig_btn)
 
     def _add_color_layout(self):
@@ -177,10 +178,30 @@ class RigGenWin(QtWidgets.QDialog):
         self.buttons_layout.addWidget(self.ik_fk_btn)
         self.main_layout.addLayout(self.buttons_layout)
 
-    def _mk_seperate_unique_controls(self):
+    def _add_unique_controls_layout(self):
+        self.unique_controls_layout = QtWidgets.QVBoxLayout()
+        self._mk_unique_controls_labels()
+        self._mk_unique_controls_combo_box()
+        self._mk_unique_controls_button()
+        self.main_layout.addLayout(self.unique_controls_layout)
+
+    def _mk_unique_controls_labels(self):
+        self.ctrls_layout = QtWidgets.QHBoxLayout()
+        self.ctrls_lbl = QtWidgets.QLabel('Create: ')
+        self.ctrls_lbl.setAlignment(Qt.AlignRight)
+        self.ctrls_layout.addWidget(self.ctrls_lbl)
+
+    def _mk_unique_controls_combo_box(self):
         # QComboBox: 'Unique Controls: ' (LIST)
+        self.ctrls_cbx = QtWidgets.QComboBox()
+        self.ctrls_layout.addWidget(self.ctrls_cbx)
+        self.main_layout.addLayout(self.ctrls_layout)
+        # TODO: add items
+
+    def _mk_unique_controls_button(self):
         # Button: 'Create' (To create unique curves, not rigged.)
-        pass
+        self.con_btn = QtWidgets.QPushButton('Create')
+        self.main_layout.addWidget(self.con_btn)
 
 class RigGen():
     def __init__(self):
