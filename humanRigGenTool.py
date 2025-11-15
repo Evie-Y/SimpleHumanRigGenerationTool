@@ -66,26 +66,71 @@ class RigGenWin(QtWidgets.QDialog):
     def _add_color_layout(self):
         self.color_layout = QtWidgets.QVBoxLayout()
         self._mk_con_color_check_box()
+        self._mk_right_colors_labels()
         self._mk_right_colors_combo_box()
+        self._mk_center_colors_label()
+        self._mk_center_colors_combo_box()
+        self._mk_left_colors_labels()
+        self._mk_left_colors_combo_box()
         self.main_layout.addLayout(self.color_layout)
     
     def _mk_con_color_check_box(self):
         # Checkbox: 'Same color for IK' (if on, ik/fk same colors)
         self.enable_ik_color_cb = QtWidgets.QCheckBox('Same Color for IK')
-        self.color_layout.addWidget(self.enable_ik_color_cb)
+        self.main_layout.addWidget(self.enable_ik_color_cb)
+
+    def _mk_right_colors_labels(self):
+        self.r_lbl_layout = QtWidgets.QHBoxLayout()
+        self.r_fk_lbl = QtWidgets.QLabel('Right FK Color')
+        self.r_ik_lbl = QtWidgets.QLabel('Right IK Color')
+        self.r_lbl_layout.addWidget(self.r_fk_lbl)
+        self.r_lbl_layout.addWidget(self.r_ik_lbl)
+        self.main_layout.addLayout(self.r_lbl_layout)
 
     def _mk_right_colors_combo_box(self):
-        self.r_fk_cbx_layout = QtWidgets.QHBoxLayout()
+        self.r_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
-        self.r_fk_lbl = QtWidgets.QLabel('Right FK Color')
         self.r_fk_cbx = QtWidgets.QComboBox()
-        self.r_fk_cbx.insertItem(1, 'Red')
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
+        self.r_ik_cbx = QtWidgets.QComboBox()
+        self.r_cbx_layout.addWidget(self.r_fk_cbx)
+        self.r_cbx_layout.addWidget(self.r_ik_cbx)
+        self.main_layout.addLayout(self.r_cbx_layout)
+        # TODO: Add Items
+
+    def _mk_center_colors_label(self):
+        self.c_lbl_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Center / Color: ' (LIST)
-        # QComboBox: 'Left FK/ Color: ' (LIST)
-        # QComboBox: 'Left IK / Color: ' (LIST) (disabled if cb on)
-        self.r_fk_cbx_layout.addWidget(self.r_fk_cbx)
-        self.main_layout.addLayout(self.r_fk_cbx_layout)
+        self.c_lbl = QtWidgets.QLabel('Center Control Color')
+        self.c_lbl_layout.addWidget(self.c_lbl)
+        self.main_layout.addLayout(self.c_lbl_layout)
+
+    def _mk_center_colors_combo_box(self):
+        self.c_cbx_layout = QtWidgets.QHBoxLayout()
+        # QComboBox: 'Center / Color: ' (LIST)
+        self.c_cbx = QtWidgets.QComboBox()
+        self.c_cbx_layout.addWidget(self.c_cbx)
+        self.main_layout.addLayout(self.c_cbx_layout)
+        # TODO: Add Items
+
+    def _mk_left_colors_labels(self):
+        self.r_lbl_layout = QtWidgets.QHBoxLayout()
+        self.r_fk_lbl = QtWidgets.QLabel('Right FK Color')
+        self.r_ik_lbl = QtWidgets.QLabel('Right IK Color')
+        self.r_lbl_layout.addWidget(self.r_fk_lbl)
+        self.r_lbl_layout.addWidget(self.r_ik_lbl)
+        self.main_layout.addLayout(self.r_lbl_layout)
+
+    def _mk_left_colors_combo_box(self):
+        self.r_cbx_layout = QtWidgets.QHBoxLayout()
+        # QComboBox: 'Right FK/ Color: ' (LIST)
+        self.r_fk_cbx = QtWidgets.QComboBox()
+        # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
+        self.r_ik_cbx = QtWidgets.QComboBox()
+        self.r_cbx_layout.addWidget(self.r_fk_cbx)
+        self.r_cbx_layout.addWidget(self.r_ik_cbx)
+        self.main_layout.addLayout(self.r_cbx_layout)
+        # TODO: Add Items
 
     def _build_control_colors_list(self):
         # 32 colors
@@ -95,6 +140,7 @@ class RigGenWin(QtWidgets.QDialog):
             'White', 'Yellow', 'Light Blue', 'Mint', 'Peach', 'Orange', 
             'Pale Yellow', 'Mute Green', 'Dark Orange', 'Fern', 'Grass Green',
             'Blue Mint', 'Mute Blue', 'Purple', 'Light Pink']
+        return self.con_colors
 
     def _mk_ik_fk_layout(self):
         # Checkbox: 'Unique Shapes ON: ' (if off, controls are circle crv)
