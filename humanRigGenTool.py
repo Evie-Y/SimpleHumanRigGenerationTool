@@ -25,6 +25,10 @@ class RigGenWin(QtWidgets.QDialog):
         self.setWindowTitle("Simple Humanoid Rig Generator")
         self.resize(225, 250)
         self._mk_win_layout()
+        # TODO: add connectors
+        # TODO: cb functionality
+        # TODO: add items to combobox
+        # TODO: extra- add seperators
 
     def cancel(self):
         self.close()
@@ -62,7 +66,6 @@ class RigGenWin(QtWidgets.QDialog):
     def _mk_generate_rig_button(self):
         # Button: 'Generate' (the standard settings)
         self.rig_btn = QtWidgets.QPushButton('Generate')
-        self.main_layout.addWidget(self.top_sprt)
         self.main_layout.addWidget(self.rig_btn)
 
     def _add_color_layout(self):
