@@ -23,7 +23,7 @@ class RigGenWin(QtWidgets.QDialog):
         super().__init__(parent=get_maya_main_win())
         self.rigGen = RigGen()
         self.setWindowTitle("Simple Humanoid Rig Generator")
-        self.resize(250, 500)
+        self.resize(225, 250)
         self._mk_win_layout()
 
     def cancel(self):
@@ -41,6 +41,7 @@ class RigGenWin(QtWidgets.QDialog):
         # Color layout
         self._add_color_layout()
         # IK/FK layout
+        self._add_ik_fk_layout()
         # Unique Controls Layout
         self.setLayout(self.main_layout)
         pass
@@ -73,7 +74,7 @@ class RigGenWin(QtWidgets.QDialog):
         self._mk_left_colors_labels()
         self._mk_left_colors_combo_box()
         self.main_layout.addLayout(self.color_layout)
-    
+
     def _mk_con_color_check_box(self):
         # Checkbox: 'Same color for IK' (if on, ik/fk same colors)
         self.enable_ik_color_cb = QtWidgets.QCheckBox('Same Color for IK')
@@ -140,15 +141,43 @@ class RigGenWin(QtWidgets.QDialog):
             'White', 'Yellow', 'Light Blue', 'Mint', 'Peach', 'Orange', 
             'Pale Yellow', 'Mute Green', 'Dark Orange', 'Fern', 'Grass Green',
             'Blue Mint', 'Mute Blue', 'Purple', 'Light Pink']
-        return self.con_colors
+        
+    def _add_ik_fk_layout(self):
+        self.ik_fk_layout = QtWidgets.QVBoxLayout()
+        self._mk_ik_fk_check_box()
+        self._mk_ik_fk_spin_box()
+        self._mk_ik_fk_buttons()
+        self.main_layout.addLayout(self.ik_fk_layout)
 
-    def _mk_ik_fk_layout(self):
+    def _mk_ik_fk_check_box(self):
         # Checkbox: 'Unique Shapes ON: ' (if off, controls are circle crv)
-        # SpinBox: 'Control Size: ' (Min=.1, Max=100)
-        # Buttons: 'FK', 'IK', 'IK/FK' (creates ik/fk)
-        pass
+        self.enable_shapes_cb = QtWidgets.QCheckBox('Unique Shapes ON')
+        self.main_layout.addWidget(self.enable_shapes_cb)
 
-    def _mk_seperate_unique_controls_layout(self):
+    def _mk_ik_fk_spin_box(self):
+        self.size_layout = QtWidgets.QHBoxLayout()
+        self.size_lbl = QtWidgets.QLabel('Control Size: ')
+        # SpinBox: 'Control Size: ' (Min=.1, Max=100)
+        self.size_dsnbx = QtWidgets.QDoubleSpinBox()
+        self.size_dsnbx.setValue(1)
+        self.size_dsnbx.setMaximum(100)
+        self.size_dsnbx.setMinimum(.1)
+        self.size_layout.addWidget(self.size_lbl)
+        self.size_layout.addWidget(self.size_dsnbx)
+        self.main_layout.addLayout(self.size_layout)
+
+    def _mk_ik_fk_buttons(self):
+        self.buttons_layout = QtWidgets.QHBoxLayout()
+        # Buttons: 'FK', 'IK', 'IK/FK' (creates ik/fk)
+        self.fk_btn = QtWidgets.QPushButton('FK')
+        self.ik_btn = QtWidgets.QPushButton('IK')
+        self.ik_fk_btn = QtWidgets.QPushButton('IK/FK')
+        self.buttons_layout.addWidget(self.fk_btn)
+        self.buttons_layout.addWidget(self.ik_btn)
+        self.buttons_layout.addWidget(self.ik_fk_btn)
+        self.main_layout.addLayout(self.buttons_layout)
+
+    def _mk_seperate_unique_controls(self):
         # QComboBox: 'Unique Controls: ' (LIST)
         # Button: 'Create' (To create unique curves, not rigged.)
         pass
