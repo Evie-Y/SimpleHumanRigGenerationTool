@@ -119,33 +119,34 @@ class RigGenWin(QtWidgets.QDialog):
         # TODO: Add Items
 
     def _mk_left_colors_labels(self):
-        self.r_lbl_layout = QtWidgets.QHBoxLayout()
-        self.r_fk_lbl = QtWidgets.QLabel('Right FK Color')
-        self.r_ik_lbl = QtWidgets.QLabel('Right IK Color')
-        self.r_lbl_layout.addWidget(self.r_fk_lbl)
-        self.r_lbl_layout.addWidget(self.r_ik_lbl)
-        self.main_layout.addLayout(self.r_lbl_layout)
+        self.l_lbl_layout = QtWidgets.QHBoxLayout()
+        self.l_fk_lbl = QtWidgets.QLabel('Left FK Color')
+        self.l_ik_lbl = QtWidgets.QLabel('Left IK Color')
+        self.l_lbl_layout.addWidget(self.l_fk_lbl)
+        self.l_lbl_layout.addWidget(self.l_ik_lbl)
+        self.main_layout.addLayout(self.l_lbl_layout)
 
     def _mk_left_colors_combo_box(self):
-        self.r_cbx_layout = QtWidgets.QHBoxLayout()
+        self.l_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
-        self.r_fk_cbx = QtWidgets.QComboBox()
+        self.l_fk_cbx = QtWidgets.QComboBox('Blue')
+        self.l_fk_cbx.addItem('Red')
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
-        self.r_ik_cbx = QtWidgets.QComboBox()
-        self.r_cbx_layout.addWidget(self.r_fk_cbx)
-        self.r_cbx_layout.addWidget(self.r_ik_cbx)
-        self.main_layout.addLayout(self.r_cbx_layout)
+        self.l_ik_cbx = QtWidgets.QComboBox()
+        self.l_cbx_layout.addWidget(self.l_fk_cbx)
+        self.l_cbx_layout.addWidget(self.l_ik_cbx)
+        self.main_layout.addLayout(self.l_cbx_layout)
         # TODO: Add Items
 
-    def _build_control_colors_list(self):
+    def _build_control_colors_list(self, cbx):
         # 32 colors
-        self.con_colors = ['Black', 'Grey', 'Light Gray', 'Dark Red',
+        cbx.setItemText(, 'Black', 'Grey', 'Light Gray', 'Dark Red',
             'Dark Blue', 'Blue', 'Green', 'Dark Purple', 'Pink', 'Brown',
             'Dark Brown', 'Red-Brown', 'Red', 'Light Green', 'Turquoise',
             'White', 'Yellow', 'Light Blue', 'Mint', 'Peach', 'Orange', 
             'Pale Yellow', 'Mute Green', 'Dark Orange', 'Fern', 'Grass Green',
-            'Blue Mint', 'Mute Blue', 'Purple', 'Light Pink']
-        
+            'Blue Mint', 'Mute Blue', 'Purple', 'Light Pink')
+
     def _add_ik_fk_layout(self):
         self.ik_fk_layout = QtWidgets.QVBoxLayout()
         self._mk_ik_fk_check_box()
