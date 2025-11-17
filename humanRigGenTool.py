@@ -25,16 +25,17 @@ class RigGenWin(QtWidgets.QDialog):
         self.setWindowTitle("Simple Humanoid Rig Generator")
         self.resize(225, 250)
         self._mk_win_layout()
+        self._connect_signals()
         # TODO: add connectors
         # TODO: cb functionality
         # TODO: extra- add seperators
 
-    def cancel(self):
-        self.close()
+    def _connect_signals(self):
+        self.rig_btn.clicked.connect(self.generate)
 
     @QtCore.Slot()
-    def build(self):
-        self.rigGen.build()
+    def generate(self):
+        self.rigGen.mk_fk_rig()
 
     def _mk_win_layout(self):
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -240,7 +241,11 @@ class RigGen():
 
     def mk_fk_rig(self):
         # Make FK rig functional
-        pass
+        for jnt in cmds.ls(sl=True):
+            con = cmds.circle(n=jnt.replace('_JNT', '_CON'))
+            grp = cmds.group(con, n=jnt.replace('_JNT', "_GRP"))
+            cmds.delete(cmds.parentConstraint(jnt, grp))
+            cmds.parentConstraint(con, jnt)
 
     def mk_ikfk_switch(self):
         # Make IK/FK switch functional
@@ -280,7 +285,8 @@ class RigGen():
         # add picked shape&color
         # bold if ikfk switch
         # mk spline to 'spine' joints
-
+        pass
+        
     def build(self):
         # might delete if unessasary
         pass
