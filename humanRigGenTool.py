@@ -27,7 +27,6 @@ class RigGenWin(QtWidgets.QDialog):
         self._mk_win_layout()
         # TODO: add connectors
         # TODO: cb functionality
-        # TODO: add items to combobox
         # TODO: extra- add seperators
 
     def cancel(self):
@@ -103,7 +102,6 @@ class RigGenWin(QtWidgets.QDialog):
         self.r_cbx_layout.addWidget(self.r_fk_cbx)
         self.r_cbx_layout.addWidget(self.r_ik_cbx)
         self.main_layout.addLayout(self.r_cbx_layout)
-        # TODO: Add Items
 
     def _mk_center_colors_label(self):
         self.c_lbl_layout = QtWidgets.QHBoxLayout()
@@ -119,7 +117,6 @@ class RigGenWin(QtWidgets.QDialog):
         self._build_control_colors_list(self.c_cbx)
         self.c_cbx_layout.addWidget(self.c_cbx)
         self.main_layout.addLayout(self.c_cbx_layout)
-        # TODO: Add Items
 
     def _mk_left_colors_labels(self):
         self.l_lbl_layout = QtWidgets.QHBoxLayout()
@@ -140,7 +137,6 @@ class RigGenWin(QtWidgets.QDialog):
         self.l_cbx_layout.addWidget(self.l_fk_cbx)
         self.l_cbx_layout.addWidget(self.l_ik_cbx)
         self.main_layout.addLayout(self.l_cbx_layout)
-        # TODO: Add Items
 
     def _build_control_colors_list(self, cbx):
         # 32 colors
@@ -223,6 +219,9 @@ class RigGenWin(QtWidgets.QDialog):
 
 class RigGen():
     def __init__(self):
+        pass
+
+    def mk_ctrl_shapes(self):
         # Make unique controls
             # either make w/ python or import based on complexity
                 # square
@@ -233,13 +232,55 @@ class RigGen():
                 # knee shape (PV)
                 # elbow shape (PV)
                 # sphere?
+        pass
+
+    def mk_ik_rig(self):
         # Make IK rig functional
+        pass
+
+    def mk_fk_rig(self):
         # Make FK rig functional
+        pass
+
+    def mk_ikfk_switch(self):
         # Make IK/FK switch functional
+        pass
+
+    def mk_spline_rig(self):
         # Make a spline rig functional
+        pass
+
+    def edit_ctrl_color(self):
         # Make controls change color based on L/R naming
+        pass
+
+    def edit_ctrl_bold(self):
         # Make controls change boldness based on the control's function
         pass
 
+    def generate(self):
+        # select joints
+        # if joints dont have "JNT" suffix; 'select joints w suff'
+        # if pressed 'generate'
+        # generate loop (only for neck down)
+        # for joint in ls:
+        # mk_fkik
+        # add corresponding shape&color
+        # bold if ikfk switch
+        # mk spline to 'spine' joints
+        pass
+
+    def create(self):
+        # select joints
+        # if joints dont have "JNT" suffix; 'select joints w suff'
+        # if pressed 'create
+        # create loop (only for neck down)
+        # for joint in ls:
+        # mk_fkik
+        # add picked shape&color
+        # bold if ikfk switch
+        # mk spline to 'spine' joints
+
     def build(self):
+        # might delete if unessasary
         pass
