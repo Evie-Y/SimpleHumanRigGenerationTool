@@ -96,8 +96,10 @@ class RigGenWin(QtWidgets.QDialog):
         self.r_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
         self.r_fk_cbx = QtWidgets.QComboBox()
+        self._build_control_colors_list(self.r_fk_cbx)
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
         self.r_ik_cbx = QtWidgets.QComboBox()
+        self._build_control_colors_list(self.r_ik_cbx)
         self.r_cbx_layout.addWidget(self.r_fk_cbx)
         self.r_cbx_layout.addWidget(self.r_ik_cbx)
         self.main_layout.addLayout(self.r_cbx_layout)
@@ -114,14 +116,15 @@ class RigGenWin(QtWidgets.QDialog):
         self.c_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Center / Color: ' (LIST)
         self.c_cbx = QtWidgets.QComboBox()
+        self._build_control_colors_list(self.c_cbx)
         self.c_cbx_layout.addWidget(self.c_cbx)
         self.main_layout.addLayout(self.c_cbx_layout)
         # TODO: Add Items
 
     def _mk_left_colors_labels(self):
         self.l_lbl_layout = QtWidgets.QHBoxLayout()
-        self.l_fk_lbl = QtWidgets.QLabel('Left FK Color')
-        self.l_ik_lbl = QtWidgets.QLabel('Left IK Color')
+        self.l_fk_lbl = QtWidgets.QLabel('Right FK Color')
+        self.l_ik_lbl = QtWidgets.QLabel('Right IK Color')
         self.l_lbl_layout.addWidget(self.l_fk_lbl)
         self.l_lbl_layout.addWidget(self.l_ik_lbl)
         self.main_layout.addLayout(self.l_lbl_layout)
@@ -129,10 +132,11 @@ class RigGenWin(QtWidgets.QDialog):
     def _mk_left_colors_combo_box(self):
         self.l_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
-        self.l_fk_cbx = QtWidgets.QComboBox('Blue')
-        self.l_fk_cbx.addItem('Red')
+        self.l_fk_cbx = QtWidgets.QComboBox()
+        self._build_control_colors_list(self.l_fk_cbx)
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
         self.l_ik_cbx = QtWidgets.QComboBox()
+        self._build_control_colors_list(self.l_ik_cbx)
         self.l_cbx_layout.addWidget(self.l_fk_cbx)
         self.l_cbx_layout.addWidget(self.l_ik_cbx)
         self.main_layout.addLayout(self.l_cbx_layout)
@@ -140,13 +144,15 @@ class RigGenWin(QtWidgets.QDialog):
 
     def _build_control_colors_list(self, cbx):
         # 32 colors
-        cbx.setItemText(, 'Black', 'Grey', 'Light Gray', 'Dark Red',
+        self.con_colors = ['Black', 'Grey', 'Light Gray', 'Dark Red',
             'Dark Blue', 'Blue', 'Green', 'Dark Purple', 'Pink', 'Brown',
             'Dark Brown', 'Red-Brown', 'Red', 'Light Green', 'Turquoise',
             'White', 'Yellow', 'Light Blue', 'Mint', 'Peach', 'Orange', 
             'Pale Yellow', 'Mute Green', 'Dark Orange', 'Fern', 'Grass Green',
-            'Blue Mint', 'Mute Blue', 'Purple', 'Light Pink')
-
+            'Blue Mint', 'Mute Blue', 'Purple', 'Light Pink']
+        for color in self.con_colors:
+            cbx.addItem(color)
+        
     def _add_ik_fk_layout(self):
         self.ik_fk_layout = QtWidgets.QVBoxLayout()
         self._mk_ik_fk_check_box()
@@ -198,9 +204,17 @@ class RigGenWin(QtWidgets.QDialog):
     def _mk_unique_controls_combo_box(self):
         # QComboBox: 'Unique Controls: ' (LIST)
         self.ctrls_cbx = QtWidgets.QComboBox()
+        self._build_unique_controls_list(self.ctrls_cbx)
         self.ctrls_layout.addWidget(self.ctrls_cbx)
         self.main_layout.addLayout(self.ctrls_layout)
-        # TODO: add items
+
+    def _build_unique_controls_list(self, cbx):
+        # 32 colors
+        self.con_shapes = ['Sqaure', 'Rectangle', 'Triangle', 'Diamond',
+            'Arrow', 'Flexible Arrow', 'Left, Up, Right Arrow', 'Quad Arrow',
+            'Knee PV', 'Elbow PV', 'Sphere']
+        for shape in self.con_shapes:
+            cbx.addItem(shape)
 
     def _mk_unique_controls_button(self):
         # Button: 'Create' (To create unique curves, not rigged.)
@@ -210,6 +224,15 @@ class RigGenWin(QtWidgets.QDialog):
 class RigGen():
     def __init__(self):
         # Make unique controls
+            # either make w/ python or import based on complexity
+                # square
+                # rectangle
+                # triangle
+                # diamond
+                # arrow (variants)
+                # knee shape (PV)
+                # elbow shape (PV)
+                # sphere?
         # Make IK rig functional
         # Make FK rig functional
         # Make IK/FK switch functional
