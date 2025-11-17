@@ -96,12 +96,14 @@ class RigGenWin(QtWidgets.QDialog):
         self.r_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
         self.r_fk_cbx = QtWidgets.QComboBox()
-        # placeholder text: 'pink'
         self._build_control_colors_list(self.r_fk_cbx)
+        # placeholder text: 'pink'
+        self.r_fk_cbx.setCurrentIndex(29)
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
         self.r_ik_cbx = QtWidgets.QComboBox()
-        # placeholder text: 'red'
         self._build_control_colors_list(self.r_ik_cbx)
+        # placeholder text: 'red'
+        self.r_ik_cbx.setCurrentIndex(12)
         self.r_cbx_layout.addWidget(self.r_fk_cbx)
         self.r_cbx_layout.addWidget(self.r_ik_cbx)
         self.main_layout.addLayout(self.r_cbx_layout)
@@ -117,8 +119,9 @@ class RigGenWin(QtWidgets.QDialog):
         self.c_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Center / Color: ' (LIST)
         self.c_cbx = QtWidgets.QComboBox()
-        # placeholder text: 'yellow'
         self._build_control_colors_list(self.c_cbx)
+        # placeholder text: 'yellow'
+        self.c_cbx.setCurrentIndex(16)
         self.c_cbx_layout.addWidget(self.c_cbx)
         self.main_layout.addLayout(self.c_cbx_layout)
 
@@ -134,18 +137,20 @@ class RigGenWin(QtWidgets.QDialog):
         self.l_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
         self.l_fk_cbx = QtWidgets.QComboBox()
-        # placeholder text: 'light blue'
         self._build_control_colors_list(self.l_fk_cbx)
+        # placeholder text: 'light blue'
+        self.l_fk_cbx.setCurrentIndex(17)
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
         self.l_ik_cbx = QtWidgets.QComboBox()
-        # placeholder text: 'blue'
         self._build_control_colors_list(self.l_ik_cbx)
+        # placeholder text: 'blue'
+        self.l_ik_cbx.setCurrentIndex(5)
         self.l_cbx_layout.addWidget(self.l_fk_cbx)
         self.l_cbx_layout.addWidget(self.l_ik_cbx)
         self.main_layout.addLayout(self.l_cbx_layout)
 
     def _build_control_colors_list(self, cbx):
-        # 32 colors
+        # 31 colors
         self.con_colors = ['Black', 'Grey', 'Light Gray', 'Dark Red',
             'Dark Blue', 'Blue', 'Green', 'Dark Purple', 'Pink', 'Brown',
             'Dark Brown', 'Red-Brown', 'Red', 'Light Green', 'Turquoise',
@@ -246,11 +251,28 @@ class RigGen():
 
     def mk_fk_rig(self):
         # Make FK rig functional
+        self.con_list = []
+        self.grp_list = []
+        # rig_grp = cmds.group(n='rig_GRP')
+        # con_grp.append(rig_grp)
         for jnt in cmds.ls(sl=True):
-            con = cmds.circle(n=jnt.replace('_JNT', '_CON'))
+            con, shape = cmds.circle(n=jnt.replace('_JNT', '_CON'))
             grp = cmds.group(con, n=jnt.replace('_JNT', "_GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
+            # TODO: group groups to con
+            # cmds.parent(grp, con_grp[-1])
+            self.con_list.append(con)
+            self.grp_list.append(grp)
+        self.mk_group_parent_structure()
+
+    def mk_group_parent_structure(self):
+        grp_seq = 1
+        con_seq = 0
+        for con in self.con_list:
+            cmds.parent(self.grp_list[grp_seq], self.con_list[con_seq])
+            con_seq += 1
+            grp_seq += 1
 
     def mk_ikfk_switch(self):
         # Make IK/FK switch functional
