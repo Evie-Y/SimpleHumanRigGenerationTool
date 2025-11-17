@@ -96,9 +96,11 @@ class RigGenWin(QtWidgets.QDialog):
         self.r_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
         self.r_fk_cbx = QtWidgets.QComboBox()
+        # placeholder text: 'pink'
         self._build_control_colors_list(self.r_fk_cbx)
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
         self.r_ik_cbx = QtWidgets.QComboBox()
+        # placeholder text: 'red'
         self._build_control_colors_list(self.r_ik_cbx)
         self.r_cbx_layout.addWidget(self.r_fk_cbx)
         self.r_cbx_layout.addWidget(self.r_ik_cbx)
@@ -115,6 +117,7 @@ class RigGenWin(QtWidgets.QDialog):
         self.c_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Center / Color: ' (LIST)
         self.c_cbx = QtWidgets.QComboBox()
+        # placeholder text: 'yellow'
         self._build_control_colors_list(self.c_cbx)
         self.c_cbx_layout.addWidget(self.c_cbx)
         self.main_layout.addLayout(self.c_cbx_layout)
@@ -131,9 +134,11 @@ class RigGenWin(QtWidgets.QDialog):
         self.l_cbx_layout = QtWidgets.QHBoxLayout()
         # QComboBox: 'Right FK/ Color: ' (LIST)
         self.l_fk_cbx = QtWidgets.QComboBox()
+        # placeholder text: 'light blue'
         self._build_control_colors_list(self.l_fk_cbx)
         # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
         self.l_ik_cbx = QtWidgets.QComboBox()
+        # placeholder text: 'blue'
         self._build_control_colors_list(self.l_ik_cbx)
         self.l_cbx_layout.addWidget(self.l_fk_cbx)
         self.l_cbx_layout.addWidget(self.l_ik_cbx)
