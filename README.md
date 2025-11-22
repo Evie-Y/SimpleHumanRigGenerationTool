@@ -63,5 +63,14 @@ Make controls change color based on L/R naming
 
 Make controls change boldness based on the control's function
 
+## Improvement for Later
+
+Doesn't work for duplicate joint names
+Doesn't work for reverse foot
+Doesn't have a way to add more con shapes
+Figure out how to serpate UI more
+Only know how to bolden controls using MEL
+Only works on joint oriented with default settings
+
 
 

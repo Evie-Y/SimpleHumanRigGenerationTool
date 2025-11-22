@@ -127,8 +127,8 @@ class RigGenWin(QtWidgets.QDialog):
 
     def _mk_left_colors_labels(self):
         self.l_lbl_layout = QtWidgets.QHBoxLayout()
-        self.l_fk_lbl = QtWidgets.QLabel('Right FK Color')
-        self.l_ik_lbl = QtWidgets.QLabel('Right IK Color')
+        self.l_fk_lbl = QtWidgets.QLabel('Left FK Color')
+        self.l_ik_lbl = QtWidgets.QLabel('Left IK Color')
         self.l_lbl_layout.addWidget(self.l_fk_lbl)
         self.l_lbl_layout.addWidget(self.l_ik_lbl)
         self.main_layout.addLayout(self.l_lbl_layout)
@@ -219,7 +219,7 @@ class RigGenWin(QtWidgets.QDialog):
         # 32 colors
         self.con_shapes = ['Sqaure', 'Rectangle', 'Triangle', 'Diamond',
             'Arrow', 'Flexible Arrow', 'Left, Up, Right Arrow', 'Quad Arrow',
-            'Knee PV', 'Elbow PV', 'Sphere']
+            'Sphere']
         for shape in self.con_shapes:
             cbx.addItem(shape)
 
@@ -240,10 +240,11 @@ class RigGen():
                 # triangle
                 # diamond
                 # arrow (variants)
-                # knee shape (PV)
-                # elbow shape (PV)
                 # sphere?
-        pass
+        self.new_method()
+
+    def new_method(self):
+        cmds.file('Square.ma', i=True)
 
     def mk_ik_rig(self):
         # Make IK rig functional
