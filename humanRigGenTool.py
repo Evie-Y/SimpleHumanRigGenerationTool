@@ -35,7 +35,7 @@ class RigGenWin(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def generate(self):
-        self.rigGen.mk_fk_rig()
+        self.rigGen.build()
 
     def _mk_win_layout(self):
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -230,6 +230,16 @@ class RigGenWin(QtWidgets.QDialog):
 
 class RigGen():
     def __init__(self):
+        # figure out how to link colors lsit to numbers
+        self.same_color = False
+        self.right_fk_color = 0
+        self.right_ik_color = 1
+        self.center_con_color = 6
+        self.left_fk_color = 29
+        self.left_ik_color = 27
+        self.unique_shapes = True
+        self.con_size = 1
+        self.create_control_shape = 0
         pass
 
     def mk_ctrl_shapes(self):
@@ -241,10 +251,61 @@ class RigGen():
                 # diamond
                 # arrow (variants)
                 # sphere?
-        self.new_method()
+        pass
 
-    def new_method(self):
+    def mk_ctrl_square(self, name='bob'):
         cmds.file('Square.ma', i=True)
+        cmds.select('square', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctrl_rectangle(self, name='bob'):
+        cmds.file('Rectangle.ma', i=True)
+        cmds.select('rectangle', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctrl_triangle(self, name='bob'):
+        cmds.file('Triangle.ma', i=True)
+        cmds.select('triangle', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctr_semi_circle(self, name='bob'):
+        cmds.file('SemiCircle.ma', i=True)
+        cmds.select('semiCircle', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctrl_sphere(self, name='bob'):
+        cmds.file('Sphere.ma', i=True)
+        cmds.select('sphere', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctrl_diamond(self, name='bob'):
+        cmds.file('Diamond.ma', i=True)
+        cmds.select('diamond', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctrl_arrow(self, name='bob'):
+        cmds.file('ZpointingArrow.ma', i=True)
+        cmds.select('ZpointingArrow', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctrl_flexible_arrow(self, name='bob'):
+        cmds.file('ZpointingFlexibleArrow.ma', i=True)
+        cmds.select('ZpointingFlexibleArrow', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
+    
+    def mk_ctrl_quad_arrow(self, name='bob'):
+        cmds.file('QuadArrow.ma', i=True)
+        cmds.select('quadArrow', replace=True, hierarchy=True)
+        con = cmds.rename(f'{name}')
+        return con
 
     def mk_ik_rig(self):
         # Make IK rig functional
@@ -316,5 +377,7 @@ class RigGen():
         pass
         
     def build(self):
-        # might delete if unessasary
+        self.mk_fk_rig()
+        self.mk_ctr_semi_circle(name='funny')
+        self.mk_ctrl_flexible_arrow()
         pass
