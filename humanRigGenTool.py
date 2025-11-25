@@ -218,8 +218,7 @@ class RigGenWin(QtWidgets.QDialog):
     def _build_unique_controls_list(self, cbx):
         # 32 colors
         self.ui_con_shapes_list = ['Sqaure', 'Rectangle', 'Triangle', 'Diamond',
-            'Arrow', 'Flexible Arrow', 'Left, Up, Right Arrow', 'Quad Arrow',
-            'Sphere']
+            'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere']
         for shape in self.ui_con_shapes_list:
             cbx.addItem(shape)
 
@@ -260,7 +259,7 @@ class RigGen():
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctr_semi_circle(self, name='bob'):
+    def mk_ctrl_semi_circle(self, name='bob'):
         cmds.file('SemiCircle.ma', i=True)
         cmds.select('semiCircle', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
@@ -328,10 +327,22 @@ class RigGen():
 
     def create_indiviudal_con_shape_cbx(self):
         self.con_shape_list = ['Square', 'Rectangle', 'Triangle', 'Diamond',
-            'Arrow', 'Flexible Arrow', 'Left, Up, Right Arrow', 'Quad Arrow',
-            'Sphere']
+            'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere']
         index = self.con_shape_list.index(self.current_control_shape)
         print(index)
+        # shape list, connect str to int
+        # int is plugged into function
+        # number is linked to create_shape_con
+        index = 4
+        self.create_con_shape_list = [self.mk_ctrl_square,
+            self.mk_ctrl_rectangle, self.mk_ctrl_triangle,
+            self.mk_ctrl_diamond, self.mk_ctrl_arrow,
+            self.mk_ctrl_flexible_arrow, self.mk_ctrl_quad_arrow,
+            self.mk_ctrl_sphere]
+        if index == 0:
+            pass
+        if index == 1:
+            pass
 
     def mk_ikfk_switch(self):
         # Make IK/FK switch functional
