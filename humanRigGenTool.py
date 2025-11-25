@@ -217,10 +217,10 @@ class RigGenWin(QtWidgets.QDialog):
 
     def _build_unique_controls_list(self, cbx):
         # 32 colors
-        self.con_shapes = ['Sqaure', 'Rectangle', 'Triangle', 'Diamond',
+        self.ui_con_shapes_list = ['Sqaure', 'Rectangle', 'Triangle', 'Diamond',
             'Arrow', 'Flexible Arrow', 'Left, Up, Right Arrow', 'Quad Arrow',
             'Sphere']
-        for shape in self.con_shapes:
+        for shape in self.ui_con_shapes_list:
             cbx.addItem(shape)
 
     def _mk_unique_controls_button(self):
@@ -239,18 +239,7 @@ class RigGen():
         self.left_ik_color = 27
         self.unique_shapes = True
         self.con_size = 1
-        self.create_control_shape = 0
-        pass
-
-    def mk_ctrl_shapes(self):
-        # Make unique controls
-            # either make w/ python or import based on complexity
-                # square
-                # rectangle
-                # triangle
-                # diamond
-                # arrow (variants)
-                # sphere?
+        self.current_control_shape = "Arrow"
         pass
 
     def mk_ctrl_square(self, name='bob'):
@@ -309,6 +298,7 @@ class RigGen():
 
     def mk_ik_rig(self):
         # Make IK rig functional
+        self.con
         pass
 
     def mk_fk_rig(self):
@@ -335,6 +325,13 @@ class RigGen():
             cmds.parent(self.grp_list[grp_seq], self.con_list[con_seq])
             con_seq += 1
             grp_seq += 1
+
+    def create_indiviudal_con_shape_cbx(self):
+        self.con_shape_list = ['Square', 'Rectangle', 'Triangle', 'Diamond',
+            'Arrow', 'Flexible Arrow', 'Left, Up, Right Arrow', 'Quad Arrow',
+            'Sphere']
+        index = self.con_shape_list.index(self.current_control_shape)
+        print(index)
 
     def mk_ikfk_switch(self):
         # Make IK/FK switch functional
@@ -377,7 +374,5 @@ class RigGen():
         pass
         
     def build(self):
-        self.mk_fk_rig()
-        self.mk_ctr_semi_circle(name='funny')
-        self.mk_ctrl_flexible_arrow()
+        self.create_indiviudal_con_shape_cbx()
         pass
