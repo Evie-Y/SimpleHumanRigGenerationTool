@@ -25,13 +25,9 @@ class RigGenWin(QtWidgets.QDialog):
         self.setWindowTitle("Simple Humanoid Rig Generator")
         self.resize(225, 250)
         self._mk_win_layout()
-        self._connect_signals()
         # TODO: add connectors
         # TODO: cb functionality
         # TODO: extra- add seperators
-
-    def _connect_signals(self):
-        self.rig_btn.clicked.connect(self.generate)
 
     @QtCore.Slot()
     def generate(self):
@@ -41,7 +37,6 @@ class RigGenWin(QtWidgets.QDialog):
         self.main_layout = QtWidgets.QVBoxLayout()
         # Text layout
         self._mk_basic_rig_text_labels()
-        self._mk_generate_rig_button()
         # Color layout
         self._add_color_layout()
         # IK/FK layout
@@ -63,14 +58,8 @@ class RigGenWin(QtWidgets.QDialog):
         self.main_layout.addWidget(self.suff_lbl)
         self.main_layout.addWidget(self.sel_lbl)
 
-    def _mk_generate_rig_button(self):
-        # Button: 'Generate' (the standard settings)
-        self.rig_btn = QtWidgets.QPushButton('Generate')
-        self.main_layout.addWidget(self.rig_btn)
-
     def _add_color_layout(self):
         self.color_layout = QtWidgets.QVBoxLayout()
-        self._mk_con_color_check_box()
         self._mk_right_colors_labels()
         self._mk_right_colors_combo_box()
         self._mk_center_colors_label()
@@ -78,11 +67,6 @@ class RigGenWin(QtWidgets.QDialog):
         self._mk_left_colors_labels()
         self._mk_left_colors_combo_box()
         self.main_layout.addLayout(self.color_layout)
-
-    def _mk_con_color_check_box(self):
-        # Checkbox: 'Same color for IK' (if on, ik/fk same colors)
-        self.enable_ik_color_cb = QtWidgets.QCheckBox('Same Color for IK')
-        self.main_layout.addWidget(self.enable_ik_color_cb)
 
     def _mk_right_colors_labels(self):
         self.r_lbl_layout = QtWidgets.QHBoxLayout()
@@ -213,7 +197,6 @@ class RigGenWin(QtWidgets.QDialog):
         self.ctrls_cbx = QtWidgets.QComboBox()
         self._build_unique_controls_list(self.ctrls_cbx)
         self.ctrls_layout.addWidget(self.ctrls_cbx)
-        self.main_layout.addLayout(self.ctrls_layout)
 
     def _build_unique_controls_list(self, cbx):
         # 32 colors
@@ -225,12 +208,12 @@ class RigGenWin(QtWidgets.QDialog):
     def _mk_unique_controls_button(self):
         # Button: 'Create' (To create unique curves, not rigged.)
         self.con_btn = QtWidgets.QPushButton('Create')
-        self.main_layout.addWidget(self.con_btn)
+        self.ctrls_layout.addWidget(self.con_btn)
+        self.main_layout.addLayout(self.ctrls_layout)
 
 class RigGen():
     def __init__(self):
         # figure out how to link colors lsit to numbers
-        self.same_color = False
         self.right_fk_color = 0
         self.right_ik_color = 1
         self.center_con_color = 6
@@ -297,7 +280,6 @@ class RigGen():
 
     def mk_ik_rig(self):
         # Make IK rig functional
-        self.con
         pass
 
     def mk_fk_rig(self):
