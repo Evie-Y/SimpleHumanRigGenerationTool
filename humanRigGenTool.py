@@ -288,6 +288,7 @@ class RigGen():
         self.grp_list = []
         # rig_grp = cmds.group(n='rig_GRP')
         # con_grp.append(rig_grp)
+        # change circle to dif shape
         for jnt in cmds.ls(sl=True):
             con, shape = cmds.circle(n=jnt.replace('_JNT', '_CON'))
             grp = cmds.group(con, n=jnt.replace('_JNT', "_GRP"))
@@ -307,24 +308,22 @@ class RigGen():
             con_seq += 1
             grp_seq += 1
 
-    def create_indiviudal_con_shape_cbx(self):
+    def create_shapes_list(self):
         self.con_shape_list = ['Square', 'Rectangle', 'Triangle', 'Diamond',
             'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere']
-        index = self.con_shape_list.index(self.current_control_shape)
-        print(index)
-        # shape list, connect str to int
-        # int is plugged into function
-        # number is linked to create_shape_con
-        index = 4
         self.create_con_shape_list = [self.mk_ctrl_square,
             self.mk_ctrl_rectangle, self.mk_ctrl_triangle,
             self.mk_ctrl_diamond, self.mk_ctrl_arrow,
             self.mk_ctrl_flexible_arrow, self.mk_ctrl_quad_arrow,
             self.mk_ctrl_sphere]
-        if index == 0:
-            pass
-        if index == 1:
-            pass
+        return self.con_shape_list, self.create_con_shape_list
+
+    def link_shapes(self):
+        str_list, funct_list = self.create_shapes_list()
+        self.index = str_list.index(self.current_control_shape)
+        print(self.index)
+        print(str_list)
+        print(str_list[2])
 
     def mk_ikfk_switch(self):
         # Make IK/FK switch functional
@@ -367,5 +366,5 @@ class RigGen():
         pass
         
     def build(self):
-        self.create_indiviudal_con_shape_cbx()
+        self.link_shapes()
         pass
