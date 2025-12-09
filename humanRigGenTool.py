@@ -25,13 +25,40 @@ class RigGenWin(QtWidgets.QDialog):
         self.setWindowTitle("Simple Humanoid Rig Generator")
         self.resize(225, 250)
         self._mk_win_layout()
+        self.connect_signals()
         # TODO: add connectors
         # TODO: cb functionality
         # TODO: extra- add seperators
 
+    def connect_signals(self):
+        self.fk_btn.clicked.connect(self.fk_generate)
+        self.ik_btn.clicked.connect(self.ik_generate)
+        self.ik_fk_btn.clicked.connect(self.ikfk_generate)
+        self.con_btn.clicked.connect(self.control_generate)
+
     @QtCore.Slot()
-    def generate(self):
-        self.rigGen.build()
+    def fk_generate(self):
+        self._update_properties()
+        self.rigGen.create_fk()
+
+    @QtCore.Slot()
+    def ik_generate(self):
+        self._update_properties()
+        self.rigGen.create_ik()
+
+    @QtCore.Slot()
+    def ikfk_generate(self):
+        self._update_properties()
+        self.rigGen.generate_ikfk()
+
+    @QtCore.Slot()
+    def control_generate(self):
+        self._update_properties()
+        self.rigGen.generate_single_control()
+    
+    def _update_properties(self):
+        self.rigGen.__init__()
+        self.rigGen.current_control_shape = str(self.ctrls_cbx.currentText())
 
     def _mk_win_layout(self):
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -200,7 +227,7 @@ class RigGenWin(QtWidgets.QDialog):
 
     def _build_unique_controls_list(self, cbx):
         # 32 colors
-        self.ui_con_shapes_list = ['Sqaure', 'Rectangle', 'Triangle', 'Diamond',
+        self.ui_con_shapes_list = ['Square', 'Rectangle', 'Triangle', 'Diamond',
             'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere']
         for shape in self.ui_con_shapes_list:
             cbx.addItem(shape)
@@ -221,58 +248,58 @@ class RigGen():
         self.left_ik_color = 27
         self.unique_shapes = True
         self.con_size = 1
-        self.current_control_shape = "Arrow"
+        self.current_control_shape = "Square"
         pass
 
-    def mk_ctrl_square(self, name='bob'):
+    def mk_ctrl_square(self, name='square_control'):
         cmds.file('Square.ma', i=True)
         cmds.select('square', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_rectangle(self, name='bob'):
+    def mk_ctrl_rectangle(self, name='rectangle_control'):
         cmds.file('Rectangle.ma', i=True)
         cmds.select('rectangle', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_triangle(self, name='bob'):
+    def mk_ctrl_triangle(self, name='triangle_control'):
         cmds.file('Triangle.ma', i=True)
         cmds.select('triangle', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_semi_circle(self, name='bob'):
+    def mk_ctrl_semi_circle(self, name='semi_circle_control'):
         cmds.file('SemiCircle.ma', i=True)
         cmds.select('semiCircle', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_sphere(self, name='bob'):
+    def mk_ctrl_sphere(self, name='sphere_control'):
         cmds.file('Sphere.ma', i=True)
         cmds.select('sphere', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_diamond(self, name='bob'):
+    def mk_ctrl_diamond(self, name='diamond_control'):
         cmds.file('Diamond.ma', i=True)
         cmds.select('diamond', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_arrow(self, name='bob'):
+    def mk_ctrl_arrow(self, name='arrow_control'):
         cmds.file('ZpointingArrow.ma', i=True)
         cmds.select('ZpointingArrow', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_flexible_arrow(self, name='bob'):
+    def mk_ctrl_flexible_arrow(self, name='flexible_arrow_control'):
         cmds.file('ZpointingFlexibleArrow.ma', i=True)
         cmds.select('ZpointingFlexibleArrow', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
         return con
     
-    def mk_ctrl_quad_arrow(self, name='bob'):
+    def mk_ctrl_quad_arrow(self, name='quad_arrow_control'):
         cmds.file('QuadArrow.ma', i=True)
         cmds.select('quadArrow', replace=True, hierarchy=True)
         con = cmds.rename(f'{name}')
@@ -322,8 +349,8 @@ class RigGen():
         str_list, funct_list = self.create_shapes_list()
         self.index = str_list.index(self.current_control_shape)
         print(self.index)
-        print(str_list)
-        print(str_list[2])
+        print(str_list[self.index])
+        funct_list[self.index]()
 
     def mk_ikfk_switch(self):
         # Make IK/FK switch functional
@@ -341,7 +368,7 @@ class RigGen():
         # Make controls change boldness based on the control's function
         pass
 
-    def generate(self):
+    def generate_ikfk(self):
         # select joints
         # if joints dont have "JNT" suffix; 'select joints w suff'
         # if pressed 'generate'
@@ -353,7 +380,19 @@ class RigGen():
         # mk spline to 'spine' joints
         pass
 
-    def create(self):
+    def create_fk(self):
+        # select joints
+        # if joints dont have "JNT" suffix; 'select joints w suff'
+        # if pressed 'create
+        # create loop (only for neck down)
+        # for joint in ls:
+        # mk_fkik
+        # add picked shape&color
+        # bold if ikfk switch
+        # mk spline to 'spine' joints
+        pass
+
+    def create_ik(self):
         # select joints
         # if joints dont have "JNT" suffix; 'select joints w suff'
         # if pressed 'create
@@ -365,6 +404,5 @@ class RigGen():
         # mk spline to 'spine' joints
         pass
         
-    def build(self):
+    def generate_single_control(self):
         self.link_shapes()
-        pass
