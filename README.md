@@ -32,11 +32,11 @@ naming.
 
 ## TODO:
 
-Make UI
+~~Make UI~~
   - Checkbox for fk, ik, or both with a switch.
   - Buttons to create unique curves, not rigged.
 
-Make unique controls
+~~Make unique controls~~
   - square
   - rectangle
   - triangle
