@@ -33,7 +33,6 @@ class RigGenWin(QtWidgets.QDialog):
     def connect_signals(self):
         self.fk_btn.clicked.connect(self.fk_generate)
         self.ik_btn.clicked.connect(self.ik_generate)
-        self.ik_fk_btn.clicked.connect(self.ikfk_generate)
         self.con_btn.clicked.connect(self.control_generate)
 
     @QtCore.Slot()
@@ -45,11 +44,6 @@ class RigGenWin(QtWidgets.QDialog):
     def ik_generate(self):
         self._update_properties()
         self.rigGen.create_ik()
-
-    @QtCore.Slot()
-    def ikfk_generate(self):
-        self._update_properties()
-        self.rigGen.generate_ikfk()
 
     @QtCore.Slot()
     def control_generate(self):
@@ -147,10 +141,8 @@ class RigGenWin(QtWidgets.QDialog):
         # Buttons: 'FK', 'IK', 'IK/FK' (creates ik/fk)
         self.fk_btn = QtWidgets.QPushButton('FK')
         self.ik_btn = QtWidgets.QPushButton('IK')
-        self.ik_fk_btn = QtWidgets.QPushButton('IK/FK')
         self.buttons_layout.addWidget(self.fk_btn)
         self.buttons_layout.addWidget(self.ik_btn)
-        self.buttons_layout.addWidget(self.ik_fk_btn)
         self.main_layout.addLayout(self.buttons_layout)
 
     def _add_unique_controls_layout(self):
@@ -301,7 +293,7 @@ class RigGen():
     def mk_fk_rig_circle(self):
         # Make FK rig functional
         for jnt in cmds.ls(sl=True):
-            con = cmds.circle(n=jnt.replace('JNT', '_ON'))
+            con = cmds.circle(n=jnt.replace('JNT', 'CON'))
             grp = cmds.group(con, n=jnt.replace('JNT', "GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
@@ -346,32 +338,8 @@ class RigGen():
         print(str_list[self.index])
         funct_list[self.index]()
 
-    def mk_ikfk_switch(self):
-        # Make IK/FK switch functional
-        pass
-
-    def mk_spline_rig(self):
-        # Make a spline rig functional
-        pass
-
     def edit_ctrl_color(self):
         # Make controls change color based on L/R naming
-        pass
-
-    def edit_ctrl_bold(self):
-        # Make controls change boldness based on the control's function
-        pass
-
-    def generate_ikfk(self):
-        # select joints
-        # if joints dont have "JNT" suffix; 'select joints w suff'
-        # if pressed 'generate'
-        # generate loop (only for neck down)
-        # for joint in ls:
-        # mk_fkik
-        # add corresponding shape&color
-        # bold if ikfk switch
-        # mk spline to 'spine' joints
         pass
 
     def create_fk(self):
