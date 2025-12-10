@@ -23,7 +23,7 @@ class RigGenWin(QtWidgets.QDialog):
         super().__init__(parent=get_maya_main_win())
         self.rigGen = RigGen()
         self.setWindowTitle("Simple Humanoid Rig Generator")
-        self.resize(225, 250)
+        self.resize(50, 50)
         self._mk_win_layout()
         self.connect_signals()
         # TODO: add connectors
@@ -59,6 +59,7 @@ class RigGenWin(QtWidgets.QDialog):
     def _update_properties(self):
         self.rigGen.__init__()
         self.rigGen.current_control_shape = str(self.ctrls_cbx.currentText())
+        self.rigGen.unique_shapes = self.enable_shapes_cb.isChecked()
 
     def _mk_win_layout(self):
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -89,18 +90,12 @@ class RigGenWin(QtWidgets.QDialog):
         self.color_layout = QtWidgets.QVBoxLayout()
         self._mk_right_colors_labels()
         self._mk_right_colors_combo_box()
-        self._mk_center_colors_label()
-        self._mk_center_colors_combo_box()
-        self._mk_left_colors_labels()
-        self._mk_left_colors_combo_box()
         self.main_layout.addLayout(self.color_layout)
 
     def _mk_right_colors_labels(self):
         self.r_lbl_layout = QtWidgets.QHBoxLayout()
-        self.r_fk_lbl = QtWidgets.QLabel('Right FK Color')
-        self.r_ik_lbl = QtWidgets.QLabel('Right IK Color')
+        self.r_fk_lbl = QtWidgets.QLabel('Control Color')
         self.r_lbl_layout.addWidget(self.r_fk_lbl)
-        self.r_lbl_layout.addWidget(self.r_ik_lbl)
         self.main_layout.addLayout(self.r_lbl_layout)
 
     def _mk_right_colors_combo_box(self):
@@ -108,57 +103,9 @@ class RigGenWin(QtWidgets.QDialog):
         # QComboBox: 'Right FK/ Color: ' (LIST)
         self.r_fk_cbx = QtWidgets.QComboBox()
         self._build_control_colors_list(self.r_fk_cbx)
-        # placeholder text: 'pink'
-        self.r_fk_cbx.setCurrentIndex(29)
-        # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
-        self.r_ik_cbx = QtWidgets.QComboBox()
-        self._build_control_colors_list(self.r_ik_cbx)
-        # placeholder text: 'red'
-        self.r_ik_cbx.setCurrentIndex(12)
         self.r_cbx_layout.addWidget(self.r_fk_cbx)
-        self.r_cbx_layout.addWidget(self.r_ik_cbx)
         self.main_layout.addLayout(self.r_cbx_layout)
 
-    def _mk_center_colors_label(self):
-        self.c_lbl_layout = QtWidgets.QHBoxLayout()
-        # QComboBox: 'Center / Color: ' (LIST)
-        self.c_lbl = QtWidgets.QLabel('Center Control Color')
-        self.c_lbl_layout.addWidget(self.c_lbl)
-        self.main_layout.addLayout(self.c_lbl_layout)
-
-    def _mk_center_colors_combo_box(self):
-        self.c_cbx_layout = QtWidgets.QHBoxLayout()
-        # QComboBox: 'Center / Color: ' (LIST)
-        self.c_cbx = QtWidgets.QComboBox()
-        self._build_control_colors_list(self.c_cbx)
-        # placeholder text: 'yellow'
-        self.c_cbx.setCurrentIndex(16)
-        self.c_cbx_layout.addWidget(self.c_cbx)
-        self.main_layout.addLayout(self.c_cbx_layout)
-
-    def _mk_left_colors_labels(self):
-        self.l_lbl_layout = QtWidgets.QHBoxLayout()
-        self.l_fk_lbl = QtWidgets.QLabel('Left FK Color')
-        self.l_ik_lbl = QtWidgets.QLabel('Left IK Color')
-        self.l_lbl_layout.addWidget(self.l_fk_lbl)
-        self.l_lbl_layout.addWidget(self.l_ik_lbl)
-        self.main_layout.addLayout(self.l_lbl_layout)
-
-    def _mk_left_colors_combo_box(self):
-        self.l_cbx_layout = QtWidgets.QHBoxLayout()
-        # QComboBox: 'Right FK/ Color: ' (LIST)
-        self.l_fk_cbx = QtWidgets.QComboBox()
-        self._build_control_colors_list(self.l_fk_cbx)
-        # placeholder text: 'light blue'
-        self.l_fk_cbx.setCurrentIndex(17)
-        # QComboBox: 'Right IK/ Color: ' (LIST) (disabled if cb on)
-        self.l_ik_cbx = QtWidgets.QComboBox()
-        self._build_control_colors_list(self.l_ik_cbx)
-        # placeholder text: 'blue'
-        self.l_ik_cbx.setCurrentIndex(5)
-        self.l_cbx_layout.addWidget(self.l_fk_cbx)
-        self.l_cbx_layout.addWidget(self.l_ik_cbx)
-        self.main_layout.addLayout(self.l_cbx_layout)
 
     def _build_control_colors_list(self, cbx):
         # 31 colors
@@ -179,21 +126,21 @@ class RigGenWin(QtWidgets.QDialog):
         self.main_layout.addLayout(self.ik_fk_layout)
 
     def _mk_ik_fk_check_box(self):
+        self.adjustments_layout = QtWidgets.QHBoxLayout()
         # Checkbox: 'Unique Shapes ON: ' (if off, controls are circle crv)
         self.enable_shapes_cb = QtWidgets.QCheckBox('Unique Shapes ON')
-        self.main_layout.addWidget(self.enable_shapes_cb)
+        self.adjustments_layout.addWidget(self.enable_shapes_cb)
 
     def _mk_ik_fk_spin_box(self):
-        self.size_layout = QtWidgets.QHBoxLayout()
         self.size_lbl = QtWidgets.QLabel('Control Size: ')
         # SpinBox: 'Control Size: ' (Min=.1, Max=100)
         self.size_dsnbx = QtWidgets.QDoubleSpinBox()
         self.size_dsnbx.setValue(1)
         self.size_dsnbx.setMaximum(100)
         self.size_dsnbx.setMinimum(.1)
-        self.size_layout.addWidget(self.size_lbl)
-        self.size_layout.addWidget(self.size_dsnbx)
-        self.main_layout.addLayout(self.size_layout)
+        self.adjustments_layout.addWidget(self.size_lbl)
+        self.adjustments_layout.addWidget(self.size_dsnbx)
+        self.main_layout.addLayout(self.adjustments_layout)
 
     def _mk_ik_fk_buttons(self):
         self.buttons_layout = QtWidgets.QHBoxLayout()
@@ -242,10 +189,6 @@ class RigGen():
     def __init__(self):
         # figure out how to link colors lsit to numbers
         self.color = 0
-        self.right_ik_color = 1
-        self.center_con_color = 6
-        self.left_fk_color = 29
-        self.left_ik_color = 27
         self.unique_shapes = True
         self.con_size = 1
         self.current_control_shape = "Square"
