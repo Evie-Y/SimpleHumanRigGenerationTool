@@ -54,6 +54,7 @@ class RigGenWin(QtWidgets.QDialog):
         self.rigGen.__init__()
         self.rigGen.current_control_shape = str(self.ctrls_cbx.currentText())
         self.rigGen.unique_shapes = self.enable_shapes_cb.isChecked()
+        self.rigGen.con_size = self.size_dsnbx.value()
 
     def _mk_win_layout(self):
         self.main_layout = QtWidgets.QVBoxLayout()
@@ -191,6 +192,7 @@ class RigGen():
         cmds.select('square', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_rectangle(self, name='rectangle_control'):
@@ -293,7 +295,7 @@ class RigGen():
     def mk_fk_rig_circle(self):
         # Make FK rig functional
         for jnt in cmds.ls(sl=True):
-            con = cmds.circle(n=jnt.replace('JNT', 'CON'))
+            con = cmds.circle(n=jnt.replace('JNT', '_ON'))
             grp = cmds.group(con, n=jnt.replace('JNT', "GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
@@ -334,13 +336,7 @@ class RigGen():
     def link_shapes(self):
         str_list, funct_list = self.create_shapes_list()
         self.index = str_list.index(self.current_control_shape)
-        print(self.index)
-        print(str_list[self.index])
         funct_list[self.index]()
-
-    def edit_ctrl_color(self):
-        # Make controls change color based on L/R naming
-        pass
 
     def create_fk(self):
         self.con_list = []
@@ -351,17 +347,7 @@ class RigGen():
             self.mk_fk_rig_circle()
 
     def create_ik(self):
-        # select joints
-        # if joints dont have "JNT" suffix; 'select joints w suff'
-        # if pressed 'create
-        # create loop (only for neck down)
-        # for joint in ls:
-        # mk_fkik
-        # add picked shape&color
-        # bold if ikfk switch
-        # mk spline to 'spine' joints
         self.mk_ik_rig()
-        pass
         
     def generate_single_control(self):
         self.link_shapes()
