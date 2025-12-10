@@ -166,6 +166,7 @@ class RigGen():
         cmds.select('rectangle', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_triangle(self, name='triangle_control'):
@@ -173,6 +174,7 @@ class RigGen():
         cmds.select('triangle', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_semi_circle(self, name='semi_circle_control'):
@@ -180,6 +182,7 @@ class RigGen():
         cmds.select('semiCircle', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_sphere(self, name='sphere_control'):
@@ -187,6 +190,7 @@ class RigGen():
         cmds.select('sphere', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_diamond(self, name='diamond_control'):
@@ -194,6 +198,7 @@ class RigGen():
         cmds.select('diamond', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_arrow(self, name='arrow_control'):
@@ -201,6 +206,7 @@ class RigGen():
         cmds.select('ZpointingArrow', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_flexible_arrow(self, name='flexible_arrow_control'):
@@ -208,6 +214,7 @@ class RigGen():
         cmds.select('ZpointingFlexibleArrow', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
     
     def mk_ctrl_quad_arrow(self, name='quad_arrow_control'):
@@ -215,6 +222,7 @@ class RigGen():
         cmds.select('quadArrow', replace=True, hierarchy=True)
         cmds.rename(f'{name}')
         con = cmds.ls(selection=True)
+        cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
 
     def mk_ik_rig(self):
