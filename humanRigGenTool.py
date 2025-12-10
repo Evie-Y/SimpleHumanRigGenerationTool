@@ -311,47 +311,37 @@ class RigGen():
 
     def mk_fk_rig_circle(self):
         # Make FK rig functional
-        self.con_list = []
-        self.grp_list = []
-        # rig_grp = cmds.group(n='rig_GRP')
-        # con_grp.append(rig_grp)
-        # change circle to dif shape
         for jnt in cmds.ls(sl=True):
-            con, shape = cmds.circle(n=jnt.replace('_JNT', '_CON'))
+            con = cmds.circle(n=jnt.replace('_JNT', '_CON'))
             grp = cmds.group(con, n=jnt.replace('_JNT', "_GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
             # TODO: group groups to con
-            # cmds.parent(grp, con_grp[-1])
             self.con_list.append(con)
             self.grp_list.append(grp)
         self.mk_group_parent_structure()
 
     def mk_fk_rig_regular(self):
         # Make FK rig functional
-        self.con_list = []
-        self.grp_list = []
-        # rig_grp = cmds.group(n='rig_GRP')
-        # con_grp.append(rig_grp)
-        # change circle to dif shape
         for jnt in cmds.ls(sl=True):
-            con, shape = cmds.circle(n=jnt.replace('_JNT', '_CON'))
+            # add unique shapes
+            con = cmds.circle(n=jnt.replace('_JNT', '_CON'))
             grp = cmds.group(con, n=jnt.replace('_JNT', "_GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
             # TODO: group groups to con
-            # cmds.parent(grp, con_grp[-1])
             self.con_list.append(con)
             self.grp_list.append(grp)
         self.mk_group_parent_structure()
 
-    def mk_group_parent_structure(self, grp_list, con_list):
-        grp_seq = 1
-        con_seq = 0
-        for con in con_list:
-            cmds.parent(grp_list[grp_seq], con_list[con_seq])
-            con_seq += 1
-            grp_seq += 1
+    def mk_group_parent_structure(self):
+        self.grp_seq = 1
+        self.con_seq = 0
+        for con in self.con_list:
+            cmds.parent(self.grp_list[self.grp_seq],
+                        self.con_list[self.con_seq])
+            self.con_seq += 1
+            self.grp_seq += 1
 
     def create_shapes_list(self):
         self.con_shape_list = ['Square', 'Rectangle', 'Triangle', 'Diamond',
@@ -399,15 +389,8 @@ class RigGen():
         pass
 
     def create_fk(self):
-        # select joints
-        # if joints dont have "JNT" suffix; 'select joints w suff'
-        # if pressed 'create
-        # create loop (only for neck down)
-        # for joint in ls:
-        # mk_fkik
-        # add picked shape&color
-        # bold if ikfk switch
-        # mk spline to 'spine' joints
+        self.con_list = []
+        self.grp_list = []
         if self.unique_shapes == True:
             self.mk_fk_rig_regular()
         else:
