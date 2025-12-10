@@ -60,8 +60,6 @@ class RigGenWin(QtWidgets.QDialog):
         self.main_layout = QtWidgets.QVBoxLayout()
         # Text layout
         self._mk_basic_rig_text_labels()
-        # Color layout
-        self._add_color_layout()
         # IK/FK layout
         self._add_ik_fk_layout()
         # Unique Controls Layout
@@ -80,38 +78,6 @@ class RigGenWin(QtWidgets.QDialog):
         self.sel_lbl.setStyleSheet('font: bold')
         self.main_layout.addWidget(self.suff_lbl)
         self.main_layout.addWidget(self.sel_lbl)
-
-    def _add_color_layout(self):
-        self.color_layout = QtWidgets.QVBoxLayout()
-        self._mk_right_colors_labels()
-        self._mk_right_colors_combo_box()
-        self.main_layout.addLayout(self.color_layout)
-
-    def _mk_right_colors_labels(self):
-        self.r_lbl_layout = QtWidgets.QHBoxLayout()
-        self.r_fk_lbl = QtWidgets.QLabel('Control Color')
-        self.r_lbl_layout.addWidget(self.r_fk_lbl)
-        self.main_layout.addLayout(self.r_lbl_layout)
-
-    def _mk_right_colors_combo_box(self):
-        self.r_cbx_layout = QtWidgets.QHBoxLayout()
-        # QComboBox: 'Right FK/ Color: ' (LIST)
-        self.r_fk_cbx = QtWidgets.QComboBox()
-        self._build_control_colors_list(self.r_fk_cbx)
-        self.r_cbx_layout.addWidget(self.r_fk_cbx)
-        self.main_layout.addLayout(self.r_cbx_layout)
-
-
-    def _build_control_colors_list(self, cbx):
-        # 31 colors
-        self.con_colors = ['Black', 'Grey', 'Light Gray', 'Dark Red',
-            'Dark Blue', 'Blue', 'Green', 'Dark Purple', 'Pink', 'Brown',
-            'Dark Brown', 'Red-Brown', 'Red', 'Light Green', 'Turquoise',
-            'White', 'Yellow', 'Light Blue', 'Mint', 'Peach', 'Orange', 
-            'Pale Yellow', 'Mute Green', 'Dark Orange', 'Fern', 'Grass Green',
-            'Blue Mint', 'Mute Blue', 'Purple', 'Light Pink']
-        for color in self.con_colors:
-            cbx.addItem(color)
         
     def _add_ik_fk_layout(self):
         self.ik_fk_layout = QtWidgets.QVBoxLayout()
