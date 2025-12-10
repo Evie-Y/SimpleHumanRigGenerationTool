@@ -227,8 +227,8 @@ class RigGenWin(QtWidgets.QDialog):
 
     def _build_unique_controls_list(self, cbx):
         # 32 colors
-        self.ui_con_shapes_list = ['Square', 'Rectangle', 'Triangle', 'Diamond',
-            'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere']
+        self.ui_con_shapes_list =['Square', 'Rectangle', 'Triangle', 'Diamond',
+            'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere', 'SemiCircle']
         for shape in self.ui_con_shapes_list:
             cbx.addItem(shape)
 
@@ -241,7 +241,7 @@ class RigGenWin(QtWidgets.QDialog):
 class RigGen():
     def __init__(self):
         # figure out how to link colors lsit to numbers
-        self.right_fk_color = 0
+        self.color = 0
         self.right_ik_color = 1
         self.center_con_color = 6
         self.left_fk_color = 29
@@ -254,69 +254,114 @@ class RigGen():
     def mk_ctrl_square(self, name='square_control'):
         cmds.file('Square.ma', i=True)
         cmds.select('square', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_rectangle(self, name='rectangle_control'):
         cmds.file('Rectangle.ma', i=True)
         cmds.select('rectangle', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_triangle(self, name='triangle_control'):
         cmds.file('Triangle.ma', i=True)
         cmds.select('triangle', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_semi_circle(self, name='semi_circle_control'):
         cmds.file('SemiCircle.ma', i=True)
         cmds.select('semiCircle', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_sphere(self, name='sphere_control'):
         cmds.file('Sphere.ma', i=True)
         cmds.select('sphere', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_diamond(self, name='diamond_control'):
         cmds.file('Diamond.ma', i=True)
         cmds.select('diamond', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_arrow(self, name='arrow_control'):
         cmds.file('ZpointingArrow.ma', i=True)
         cmds.select('ZpointingArrow', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_flexible_arrow(self, name='flexible_arrow_control'):
         cmds.file('ZpointingFlexibleArrow.ma', i=True)
         cmds.select('ZpointingFlexibleArrow', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
     
     def mk_ctrl_quad_arrow(self, name='quad_arrow_control'):
         cmds.file('QuadArrow.ma', i=True)
         cmds.select('quadArrow', replace=True, hierarchy=True)
-        con = cmds.rename(f'{name}')
+        cmds.rename(f'{name}')
+        con = cmds.ls(selection=True)
         return con
 
     def mk_ik_rig(self):
         # Make IK rig functional
-        pass
+        selection = cmds.ls(selection=True)
+        shoulder = selection[0]
+        elbow = selection[1]
+        wrist = selection[2]
+        self.mk_idh_and_con(shoulder, wrist)
+        self.mk_pv(shoulder, elbow, wrist)
+        self.mk_pv_constraint()
+
+    def mk_pv_constraint(self):
+        cmds.select(self.pv_con[1], self.ikh[0], replace=True)
+        cmds.PoleVectorConstraint(self.pv_con[1], self.ikh[0])
+        cmds.delete(self.crv)
+
+    def mk_pv(self, shoulder, elbow, wrist):
+        # build curv
+        # build pv
+        shoulder_pos = cmds.xform(shoulder, q=1, ws=1, t=1)
+        elbow_pos = cmds.xform(elbow, q=1, ws=1, t=1)
+        wrist_pos = cmds.xform(wrist, q=1, ws=1, t=1)
+        self.crv = cmds.curve(d=1, p=(shoulder_pos, elbow_pos, wrist_pos),
+            k=(0, 1, 2), n=shoulder.replace('JNT', 'CRV'))
+        cmds.moveVertexAlongDirection(self.crv + '.cv[1]', n=4)
+        cv_pos = cmds.xform(self.crv + '.cv[1]', q=1, ws=1, t=1)
+        self.pv_con = self.mk_ctrl_semi_circle(elbow.replace('JNT', 'PV_CON'))
+        pv_grp = cmds.group(self.pv_con[1], n=wrist.replace('JNT', 'PV_GRP'))
+        cmds.xform(pv_grp, ws=True, t=cv_pos)
+
+    def mk_idh_and_con(self, shoulder, wrist):
+        # build an IK handle + control
+        name = wrist.replace('JNT', 'IKH')
+        self.ikh = cmds.ikHandle(startJoint=shoulder, n=name, ee=wrist)
+        con = self.mk_ctrl_diamond(wrist.replace('JNT', 'CON'))
+        grp = cmds.group(con, n=wrist.replace('JNT', 'GRP'))
+        pos = cmds.xform(wrist, ws=True, t=True, q=True)
+        cmds.xform(grp, ws=True, t=pos)
+        cmds.parent(self.ikh[0], con[1])
+        cmds.setAttr(self.ikh[0] + '.v', 0)
+        cmds.orientConstraint(con[1], wrist, maintainOffset=True)
 
     def mk_fk_rig_circle(self):
         # Make FK rig functional
         for jnt in cmds.ls(sl=True):
-            con = cmds.circle(n=jnt.replace('_JNT', '_CON'))
-            grp = cmds.group(con, n=jnt.replace('_JNT', "_GRP"))
+            con = cmds.circle(n=jnt.replace('JNT', '_ON'))
+            grp = cmds.group(con, n=jnt.replace('JNT', "GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
-            # TODO: group groups to con
             self.con_list.append(con)
             self.grp_list.append(grp)
         self.mk_group_parent_structure()
@@ -324,12 +369,10 @@ class RigGen():
     def mk_fk_rig_regular(self):
         # Make FK rig functional
         for jnt in cmds.ls(sl=True):
-            # add unique shapes
-            con = cmds.circle(n=jnt.replace('_JNT', '_CON'))
-            grp = cmds.group(con, n=jnt.replace('_JNT', "_GRP"))
+            con = self.mk_ctrl_sphere(jnt.replace('JNT', 'CON'))
+            grp = cmds.group(con, n=jnt.replace('JNT', "GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
-            # TODO: group groups to con
             self.con_list.append(con)
             self.grp_list.append(grp)
         self.mk_group_parent_structure()
@@ -345,12 +388,12 @@ class RigGen():
 
     def create_shapes_list(self):
         self.con_shape_list = ['Square', 'Rectangle', 'Triangle', 'Diamond',
-            'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere']
+            'Arrow', 'Flexible Arrow', 'Quad Arrow', 'Sphere', 'SemiCircle']
         self.create_con_shape_list = [self.mk_ctrl_square,
             self.mk_ctrl_rectangle, self.mk_ctrl_triangle,
             self.mk_ctrl_diamond, self.mk_ctrl_arrow,
             self.mk_ctrl_flexible_arrow, self.mk_ctrl_quad_arrow,
-            self.mk_ctrl_sphere]
+            self.mk_ctrl_sphere, self.mk_ctrl_semi_circle]
         return self.con_shape_list, self.create_con_shape_list
 
     def link_shapes(self):
@@ -406,6 +449,7 @@ class RigGen():
         # add picked shape&color
         # bold if ikfk switch
         # mk spline to 'spine' joints
+        self.mk_ik_rig()
         pass
         
     def generate_single_control(self):
