@@ -26,9 +26,7 @@ class RigGenWin(QtWidgets.QDialog):
         self.resize(50, 50)
         self._mk_win_layout()
         self.connect_signals()
-        # TODO: add connectors
-        # TODO: cb functionality
-        # TODO: extra- add seperators
+        # TODO: make circle control align with jnt transforms
 
     def connect_signals(self):
         self.fk_btn.clicked.connect(self.fk_generate)
@@ -98,7 +96,7 @@ class RigGenWin(QtWidgets.QDialog):
         self.size_dsnbx = QtWidgets.QDoubleSpinBox()
         self.size_dsnbx.setValue(1)
         self.size_dsnbx.setMaximum(100)
-        self.size_dsnbx.setMinimum(.1)
+        self.size_dsnbx.setMinimum(0)
         self.adjustments_layout.addWidget(self.size_lbl)
         self.adjustments_layout.addWidget(self.size_dsnbx)
         self.main_layout.addLayout(self.adjustments_layout)
@@ -224,6 +222,15 @@ class RigGen():
         con = cmds.ls(selection=True)
         cmds.scale(self.con_size, self.con_size, self.con_size)
         return con
+    
+    def mk_ik_rig_circle(self):
+        selection = cmds.ls(selection=True)
+        shoulder = selection[0]
+        elbow = selection[1]
+        wrist = selection[2]
+        self.mk_idh_and_con_circle(shoulder, wrist)
+        self.mk_pv_circle(shoulder, elbow, wrist)
+        self.mk_pv_constraint_circle()
 
     def mk_ik_rig(self):
         # Make IK rig functional
@@ -239,6 +246,11 @@ class RigGen():
         cmds.select(self.pv_con[1], self.ikh[0], replace=True)
         cmds.PoleVectorConstraint(self.pv_con[1], self.ikh[0])
         cmds.delete(self.crv)
+    
+    def mk_pv_constraint_circle(self):
+        cmds.select(self.pv_con, self.ikh[0], replace=True)
+        cmds.PoleVectorConstraint(self.pv_con, self.ikh[0])
+        cmds.delete(self.crv)
 
     def mk_pv(self, shoulder, elbow, wrist):
         # build curv
@@ -250,8 +262,23 @@ class RigGen():
             k=(0, 1, 2), n=shoulder.replace('JNT', 'CRV'))
         cmds.moveVertexAlongDirection(self.crv + '.cv[1]', n=4)
         cv_pos = cmds.xform(self.crv + '.cv[1]', q=1, ws=1, t=1)
-        self.pv_con = self.mk_ctrl_semi_circle(elbow.replace('JNT', 'PV_CON'))
+        self.pv_con = self.link_shapes_to_con(elbow.replace('JNT', 'PV_CON'))
         pv_grp = cmds.group(self.pv_con[1], n=wrist.replace('JNT', 'PV_GRP'))
+        cmds.xform(pv_grp, ws=True, t=cv_pos)
+
+    def mk_pv_circle(self, shoulder, elbow, wrist):
+        # build curv
+        # build pv
+        shoulder_pos = cmds.xform(shoulder, q=1, ws=1, t=1)
+        elbow_pos = cmds.xform(elbow, q=1, ws=1, t=1)
+        wrist_pos = cmds.xform(wrist, q=1, ws=1, t=1)
+        self.crv = cmds.curve(d=1, p=(shoulder_pos, elbow_pos, wrist_pos),
+            k=(0, 1, 2), n=shoulder.replace('JNT', 'CRV'))
+        cmds.moveVertexAlongDirection(self.crv + '.cv[1]', n=4)
+        cv_pos = cmds.xform(self.crv + '.cv[1]', q=1, ws=1, t=1)
+        self.pv_con = self.mk_circle_default(elbow.replace('JNT', 'PV_CON'), 
+                                self.con_size)
+        pv_grp = cmds.group(self.pv_con, n=wrist.replace('JNT', 'PV_GRP'))
         cmds.xform(pv_grp, ws=True, t=cv_pos)
 
     def mk_idh_and_con(self, shoulder, wrist):
@@ -266,10 +293,24 @@ class RigGen():
         cmds.setAttr(self.ikh[0] + '.v', 0)
         cmds.orientConstraint(con[1], wrist, maintainOffset=True)
 
+    def mk_idh_and_con_circle(self, shoulder, wrist):
+        # build an IK handle + control
+        name = wrist.replace('JNT', 'IKH')
+        self.ikh = cmds.ikHandle(startJoint=shoulder, n=name, ee=wrist)
+        con = self.mk_circle_default(wrist.replace('JNT', 'CON'),
+                                     self.con_size)
+        grp = cmds.group(con, n=wrist.replace('JNT', 'GRP'))
+        pos = cmds.xform(wrist, ws=True, t=True, q=True)
+        cmds.xform(grp, ws=True, t=pos)
+        cmds.parent(self.ikh[0], con)
+        cmds.setAttr(self.ikh[0] + '.v', 0)
+        cmds.orientConstraint(con, wrist, maintainOffset=True)
+
     def mk_fk_rig_circle(self):
         # Make FK rig functional
         for jnt in cmds.ls(sl=True):
-            con = cmds.circle(n=jnt.replace('JNT', '_ON'))
+            con = self.mk_circle_default(jnt.replace('JNT', 'CON'),
+                            self.con_size)
             grp = cmds.group(con, n=jnt.replace('JNT', "GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
@@ -280,7 +321,7 @@ class RigGen():
     def mk_fk_rig_regular(self):
         # Make FK rig functional
         for jnt in cmds.ls(sl=True):
-            con = self.mk_ctrl_sphere(jnt.replace('JNT', 'CON'))
+            con = self.link_shapes_to_con(jnt.replace('JNT', 'CON'))
             grp = cmds.group(con, n=jnt.replace('JNT', "GRP"))
             cmds.delete(cmds.parentConstraint(jnt, grp))
             cmds.parentConstraint(con, jnt)
@@ -312,6 +353,20 @@ class RigGen():
         self.index = str_list.index(self.current_control_shape)
         funct_list[self.index]()
 
+    def link_shapes_to_con(self, name='test'):
+        str_list, funct_list = self.create_shapes_list()
+        self.index = str_list.index(self.current_control_shape)
+        con = funct_list[self.index](name)
+        return con
+    
+    def mk_circle_default(self, label='circle', size='self.con_size'):
+        con, shape =cmds.circle(name=label, radius=size)
+        cmds.select(f'{label}', replace=True, hierarchy=True)
+        cmds.rotate(0, '90', 0)
+        cmds.makeIdentity(apply=True)
+        cmds.delete(ch=True)
+        return con
+
     def create_fk(self):
         self.con_list = []
         self.grp_list = []
@@ -321,7 +376,10 @@ class RigGen():
             self.mk_fk_rig_circle()
 
     def create_ik(self):
-        self.mk_ik_rig()
+        if self.unique_shapes == True:
+            self.mk_ik_rig()
+        else:
+            self.mk_ik_rig_circle()
         
     def generate_single_control(self):
         self.link_shapes()
