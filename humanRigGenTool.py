@@ -1,7 +1,7 @@
-from PySide2 import QtWidgets, QtCore
-from PySide2.QtCore import Qt
+from PySide6 import QtWidgets, QtCore
+from PySide6.QtCore import Qt
 import maya.OpenMayaUI as omui
-from shiboken2 import wrapInstance
+from shiboken6 import wrapInstance
 
 import maya.cmds as cmds
 
