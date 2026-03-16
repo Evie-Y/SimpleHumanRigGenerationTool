@@ -1,8 +1,8 @@
 # SimpleHumanRigGenerationTool
 The goal of this tool is to help make a simple rig generation tool. This will help cut the repetition of rigging and speed up the basic controls on a humanoid character.
 
-## How to Install
-### Download ZIP
+### How to Install
+##### Download ZIP
 - Click green 'Code' Button
 - Click 'Download ZIP'
 - Extract folder
