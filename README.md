@@ -1,6 +1,24 @@
 # SimpleHumanRigGenerationTool
 The goal of this tool is to help make a simple rig generation tool. This will help cut the repetition of rigging and speed up the basic controls on a humanoid character.
 
+## How to Install
+### Download ZIP
+- Click green 'Code' Button
+- Click 'Download ZIP'
+- Extract folder
+- Place the extracted folder under Maya's 'scripts' folder
+- Open Maya
+- Copy and paste this code into Maya's script editor:
+
+import riggen
+import importlib
+importlib.reload(riggen)
+win = riggen.RigGenWin()
+win.show()
+
+- Middle mouse and drag this code to the tool editor
+
+
 ### Features
 - I will include different control shapes based on slection order of the joints.
 - The control’s size will be based on parameters selected.
